@@ -19,6 +19,8 @@ def extract_access_token(request):
     Return a string.
     """
     auth_header = request.META.get('HTTP_AUTHORIZATION', '')
+    
+    logger.error("auth_header: {0}".format(auth_header))
 
     if re.compile('^Bearer\s{1}.+$').match(auth_header):
         access_token = auth_header.split()[1]
@@ -37,6 +39,8 @@ def protected_resource_view(scopes=[]):
     def wrapper(view):
         def view_wrapper(request,  *args, **kwargs):
             access_token = extract_access_token(request)
+
+            logger.error("access_token: {0}".format(access_token))
 
             try:
                 try:
